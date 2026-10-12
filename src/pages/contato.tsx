@@ -84,12 +84,12 @@ const Contato = () => {
                 <div>
                   <div className="font-semibold text-text-dark">GitHub do Projeto</div>
                   <a
-                    href="https://github.com/thaylira2026-hub/sprint3-soulpet-front-end"
+                    href="https://github.com/thaylira2026-hub/sprint4-soulpet-front-end"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-sm text-primary hover:underline"
                   >
-                    github.com/thaylira2026-hub/sprint3-soulpet-front-end ↗
+                    github.com/thaylira2026-hub/sprint4-soulpet-front-end ↗
                   </a>
                 </div>
               </div>

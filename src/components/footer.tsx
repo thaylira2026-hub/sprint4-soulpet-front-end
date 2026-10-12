@@ -35,7 +35,7 @@ const Footer = () => {
           <ul className="mt-2 space-y-1 text-sm">
             <li>
               <a
-                href="https://github.com/thaylira2026-hub/sprint3-soulpet-front-end"
+                href="https://github.com/thaylira2026-hub/sprint4-soulpet-front-end"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-white"
