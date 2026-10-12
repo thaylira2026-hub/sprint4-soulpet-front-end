@@ -11,6 +11,8 @@ import Recompensas from './pages/recompensas'
 import Integrantes from './pages/integrantes'
 import MissaoDetalhe from './pages/missao-detalhe'
 import RecompensaDetalhe from './pages/recompensa-detalhe'
+import Solucao from './pages/solucao'
+import NaoEncontrada from './pages/nao-encontrada'
 
 const App = () => {
   return (
@@ -20,6 +22,7 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/sobre" element={<Sobre />} />
+        <Route path="/solucao" element={<Solucao />} />
         <Route path="/missoes" element={<Missoes />} />
         <Route path="/missao/:id" element={<MissaoDetalhe />} />
         <Route path="/recompensas" element={<Recompensas />} />
@@ -27,6 +30,7 @@ const App = () => {
         <Route path="/integrantes" element={<Integrantes />} />
         <Route path="/faq" element={<Faq />} />
         <Route path="/contato" element={<Contato />} />
+        <Route path="*" element={<NaoEncontrada />} />
       </Routes>
 
       <Footer />
