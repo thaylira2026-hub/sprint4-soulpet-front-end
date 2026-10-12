@@ -23,7 +23,7 @@ const Integrantes = () => {
               Turma: <span className="text-primary">1TDSR-2026</span>
             </h2>
             <p className="mt-1 text-sm text-text-muted">
-              FIAP · Análise e Desenvolvimento de Sistemas · Sprint 3 · 2026
+              FIAP · Análise e Desenvolvimento de Sistemas · Sprint 4 · 2026
             </p>
           </div>
 
@@ -34,6 +34,7 @@ const Integrantes = () => {
                 photo={member.photo}
                 name={member.name}
                 rm={member.rm}
+                turma={member.turma}
                 github={member.github}
                 linkedin={member.linkedin}
               />
