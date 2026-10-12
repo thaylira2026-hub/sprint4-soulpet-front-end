@@ -112,8 +112,8 @@ const Sobre = () => {
           <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
             <RoadmapItem icon="🎨" title="Design & Layout" status="Sprint 1 · ✅ Concluído" />
             <RoadmapItem icon="🔧" title="Responsividade" status="Sprint 2 · ✅ Concluído" />
-            <RoadmapItem icon="⚡" title="Migração para React + Vite" status="Sprint 3 · 🔄 Em andamento" />
-            <RoadmapItem icon="🚀" title="Integração com API e Deploy" status="Sprint 4 · ⏳ Futuro" />
+            <RoadmapItem icon="⚡" title="Migração para React + Vite" status="Sprint 3 · ✅ Concluído" />
+            <RoadmapItem icon="🚀" title="Integração com API e Deploy" status="Sprint 4 · 🔄 Em andamento" />
           </div>
         </div>
       </section>
