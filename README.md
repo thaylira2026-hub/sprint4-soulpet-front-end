@@ -76,10 +76,10 @@ src/
 
 ```bash
 # 1. Clone o repositório
-git clone https://github.com/thaylira2026-hub/sprint3-soulpet-front-end.git
+git clone https://github.com/thaylira2026-hub/sprint4-soulpet-front-end.git
 
 # 2. Entre na pasta do projeto
-cd sprint3-soulpet-front-end
+cd sprint4-soulpet-front-end
 
 # 3. Instale as dependências
 npm install
@@ -92,7 +92,7 @@ Acesse `http://localhost:5173` no navegador. 🎉
 
 ## 🔗 Repositório
 
-[github.com/thaylira2026-hub/sprint3-soulpet-front-end](https://github.com/thaylira2026-hub/sprint3-soulpet-front-end)
+[github.com/thaylira2026-hub/sprint4-soulpet-front-end](https://github.com/thaylira2026-hub/sprint4-soulpet-front-end)
 
 ---
 
