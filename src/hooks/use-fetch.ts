@@ -23,7 +23,7 @@ export function useFetch<T>(fetcher: (signal: AbortSignal) => Promise<T>, deps: 
 
     // cancela a requisição se o usuário sair da página antes de terminar
     return () => controller.abort()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    
   }, [reloadKey, ...deps])
 
   return { state, refetch }
