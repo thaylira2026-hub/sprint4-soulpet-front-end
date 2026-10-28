@@ -72,3 +72,48 @@ sprint4-soulpet-front-end/
 ├── package.json
 └── vite.config.ts
 
+## 🔗 Como usar
+
+### Links do projeto
+
+| | Link |
+|---|---|
+| 🌐 *Aplicação na Vercel* | [soulpet-fiap.vercel.app](https://soulpet-fiap.vercel.app) |
+| 🐙 *Repositório no GitHub* | [github.com/thaylira2026-hub/sprint4-soulpet-front-end](https://github.com/thaylira2026-hub/sprint4-soulpet-front-end) |
+| 🎬 *Vídeo no YouTube* | [Assista à demonstração](LINK_DO_VIDEO_AQUI) |
+| ☕ *API Java publicada* | [URL da API](LINK_DA_API_AQUI) |
+
+### Executando localmente
+
+*Pré-requisito:* [Node.js](https://nodejs.org/) 20 ou superior.
+
+bash
+# 1. Clone o repositório
+git clone https://github.com/thaylira2026-hub/sprint4-soulpet-front-end.git
+
+# 2. Entre na pasta do projeto
+cd sprint4-soulpet-front-end
+
+# 3. Instale as dependências
+npm install
+
+# 4. Crie o arquivo .env a partir do modelo e coloque a URL da API Java
+cp .env.example .env
+
+# 5. Rode o projeto em ambiente de desenvolvimento
+npm run dev
+
+
+Acesse http://localhost:5173 no navegador. 🎉
+
+> 💡 No Windows (PowerShell), o passo 4 pode ser feito com copy .env.example .env.
+
+### Navegando pela aplicação
+
+1. Na *Home*, conheça a proposta e veja missões e recompensas em destaque.
+2. Em *Solução*, entenda o problema e como a SoulPet resolve.
+3. Em *Missões*, filtre por dificuldade e clique em uma missão para ver o detalhe.
+4. Em *Recompensas*, escolha um produto e resgate com seus pontos.
+5. Em *Contato*, envie uma mensagem para a equipe.
+
+
