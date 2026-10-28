@@ -116,4 +116,13 @@ Acesse http://localhost:5173 no navegador. 🎉
 4. Em *Recompensas*, escolha um produto e resgate com seus pontos.
 5. Em *Contato*, envie uma mensagem para a equipe.
 
+## 👥 Autores e créditos
 
+| Foto | Nome | RM | Turma | GitHub | LinkedIn |
+|---|---|---|---|---|---|
+| <img src="public/img/foto_bianca.jpeg" width="60"> | Bianca Pereira da Silva | 571077 | 1TDSR-2026 | [@biancapereirasilva](https://github.com/biancapereirasilva) | [LinkedIn](https://www.linkedin.com/in/bianca-pereira-866845213/) |
+| <img src="public/img/foto_isa.jpeg" width="60"> | Isabelle Souza Lima Pires Araujo | 569370 | 1TDSR-2026 | [@isasouzz](https://github.com/isasouzz) | [LinkedIn](https://www.linkedin.com/in/isabelle-souza-9342a027a/) |
+| <img src="public/img/foto_duda.jpeg" width="60"> | Maria Eduarda Cavallari Quarelo | 570462 | 1TDSR-2026 | [@dudaquarelo](https://github.com/dudaquarelo) | [LinkedIn](https://www.linkedin.com/in/dudaquarelo) |
+| <img src="public/img/foto_thays.jpeg" width="60"> | Thays Lira de Oliveira | 568799 | 1TDSR-2026 | [@thaylira2026-hub](https://github.com/thaylira2026-hub) | [LinkedIn](https://www.linkedin.com/in/thays-lira-538619186/) |
+
+🎓 *FIAP* — Análise e Desenvolvimento de Sistemas · Challenge 2026 · Sprint 04
