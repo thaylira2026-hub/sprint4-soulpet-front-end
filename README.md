@@ -34,3 +34,41 @@ Este repositório contém o *Front-End da Sprint 04* do *Challenge FIAP — 2º 
 - 🚫 *Página 404* com redirecionamento automático para o início
 - ❓ *FAQ em accordion* e ✉️ *formulário de contato* com validação
 - 📱 *Totalmente responsivo* (mobile, tablet e desktop) com Tailwind CSS
+
+## 🚀 Tecnologias utilizadas
+
+| Tecnologia | Finalidade |
+|---|---|
+| ⚛️ *React* | Construção da interface e componentização |
+| ⚡ *Vite* | Build tool e servidor de desenvolvimento |
+| 🔷 *TypeScript* | Tipagem estática (interfaces, union types e intersection types) |
+| 🎨 *Tailwind CSS* | Estilização utilitária e responsiva |
+| 🧭 *React Router DOM* | Navegação SPA, rotas estáticas e dinâmicas |
+| 📋 *React Hook Form* | Validação do formulário de contato |
+| 🌐 *Fetch API* | Requisições HTTP para a API Java (sem bibliotecas externas) |
+| ☕ *Java (API REST)* | Back-end que fornece e armazena os dados |
+| ▲ *Vercel* | Hospedagem e deploy contínuo da aplicação |
+| 🐙 *Git / GitHub / Gitflow* | Versionamento colaborativo (branches main, develop e feature/*) |
+
+## 📁 Estrutura de pastas
+
+
+sprint4-soulpet-front-end/
+├── public/
+│   ├── img/              # Logo e fotos das integrantes
+│   └── screenshots/      # Capturas de tela usadas no README
+├── src/
+│   ├── components/       # Componentes reutilizáveis (Header, Footer, Cards, estados de loading/erro/vazio)
+│   ├── data/             # Dados estáticos (FAQ, equipe)
+│   ├── hooks/            # Hooks personalizados (useFetch)
+│   ├── pages/            # Páginas da aplicação (Home, Solução, Missões, Recompensas, etc.)
+│   ├── services/         # Camada de integração com a API (http.ts)
+│   ├── types/            # Tipos TypeScript compartilhados
+│   ├── App.tsx           # Configuração das rotas
+│   ├── main.tsx          # Ponto de entrada da aplicação
+│   └── index.css         # Configuração do Tailwind e design tokens
+├── .env.example          # Modelo da variável de ambiente VITE_API_URL
+├── vercel.json           # Configuração de rotas SPA na Vercel
+├── package.json
+└── vite.config.ts
+
