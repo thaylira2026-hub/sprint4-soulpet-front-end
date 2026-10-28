@@ -126,3 +126,40 @@ Acesse http://localhost:5173 no navegador. 🎉
 | <img src="public/img/foto_thays.jpeg" width="60"> | Thays Lira de Oliveira | 568799 | 1TDSR-2026 | [@thaylira2026-hub](https://github.com/thaylira2026-hub) | [LinkedIn](https://www.linkedin.com/in/thays-lira-538619186/) |
 
 🎓 *FIAP* — Análise e Desenvolvimento de Sistemas · Challenge 2026 · Sprint 04
+
+## 📸 Capturas de tela
+
+<div align="center">
+
+### 🏠 Home
+<img src="public/screenshots/home.png" width="700">
+
+### 💡 Solução
+<img src="public/screenshots/solucao.png" width="700">
+
+### 🎯 Missões
+<img src="public/screenshots/missoes.png" width="700">
+
+### 🎁 Recompensas
+<img src="public/screenshots/recompensas.png" width="700">
+
+### ✉️ Contato
+<img src="public/screenshots/contato.png" width="700">
+
+</div>
+
+## 📩 Contato
+
+Dúvidas ou sugestões sobre o projeto?
+
+- 📧 *E-mail:* soulpet@fiap.com.br
+- 🌐 *Formulário:* [soulpet-fiap.vercel.app/contato](https://soulpet-fiap.vercel.app/contato)
+- 🐙 *Issues:* [abra uma issue no GitHub](https://github.com/thaylira2026-hub/sprint4-soulpet-front-end/issues)
+
+---
+
+<div align="center">
+
+Feito com 💜 pela equipe SoulPet
+
+</div>
