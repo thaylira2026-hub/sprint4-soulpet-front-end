@@ -1,9 +1,9 @@
 import type { ApiErrorBody, HttpMethod } from '../types/api'
 
-// URL da API Java. Vem do arquivo .env (local) ou das variáveis da Vercel (produção)
-const API_URL: string = import.meta.env.VITE_API_URL ?? ''
+// URL da API Java publicada no Render 
+const API_URL: string = import.meta.env.VITE_API_URL ?? 'https://soulpet-api.onrender.com'
 
-// Erro personalizado com o status HTTP, para as telas mostrarem mensagens melhores
+// Erro personalizado com o status HTTP
 export class ApiError extends Error {
   status: number
 
@@ -27,6 +27,24 @@ const friendlyMessage = (status: number): string => {
   return 'Não foi possível concluir a requisição.'
 }
 
+// A API Java às vezes devolve o erro como JSON e às vezes como texto puro
+// (ex: "Missão não encontrada!") 
+async function extractErrorMessage(response: Response): Promise<string> {
+  const fallback = friendlyMessage(response.status)
+  try {
+    const text = (await response.text()).trim()
+    if (!text) return fallback
+    try {
+      const body = JSON.parse(text) as ApiErrorBody
+      return body.message ?? body.erro ?? fallback
+    } catch {
+      return text.length < 200 && !text.startsWith('<') ? text : fallback
+    }
+  } catch {
+    return fallback
+  }
+}
+
 // Função central: todas as chamadas à API passam por aqui (usa fetch nativo, sem Axios)
 export async function request<T>(path: string, options: RequestOptions = {}): Promise<T> {
   const { method = 'GET', body, signal } = options
@@ -45,17 +63,10 @@ export async function request<T>(path: string, options: RequestOptions = {}): Pr
   }
 
   if (!response.ok) {
-    let message = friendlyMessage(response.status)
-    try {
-      const errorBody = (await response.json()) as ApiErrorBody
-      message = errorBody.message ?? errorBody.erro ?? message
-    } catch {
-      // corpo vazio ou não-JSON: mantém a mensagem padrão
-    }
-    throw new ApiError(message, response.status)
+    throw new ApiError(await extractErrorMessage(response), response.status)
   }
 
-  // 204 No Content (comum em DELETE e PUT) não tem corpo
+  // 204 No Content (comum em DELETE e PUT)
   if (response.status === 204) return undefined as T
 
   const text = await response.text()
