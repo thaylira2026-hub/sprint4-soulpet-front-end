@@ -1,12 +1,18 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { ErrorState, LoadingState } from '../components/status-message'
 import { useFetch } from '../hooks/use-fetch'
-import { buscarMissao } from '../services/missao-service'
+import { ApiError } from '../services/http'
+import { buscarMissao, concluirMissao, desfazerConclusao } from '../services/missao-service'
 import type { MissaoComStatus } from '../types/missao'
+
+type Feedback = { tipo: 'sucesso' | 'erro'; texto: string } | null
 
 const MissaoDetalhe = () => {
   const { id = '' } = useParams()
   const { state, refetch } = useFetch((signal) => buscarMissao(id, signal), [id])
+  const [enviando, setEnviando] = useState(false)
+  const [feedback, setFeedback] = useState<Feedback>(null)
 
   if (state.status === 'loading' || state.status === 'idle') {
     return (
@@ -33,10 +39,54 @@ const MissaoDetalhe = () => {
 
   const mission = state.data
 
+  // POST /usuarios-missoes ou DELETE /usuarios-missoes/{codigo}
+  const alternarConclusao = async () => {
+    setEnviando(true)
+    setFeedback(null)
+    try {
+      if (mission.conclusao) {
+        await desfazerConclusao(mission.conclusao.codigo)
+        setFeedback({ tipo: 'sucesso', texto: 'Conclusão desfeita. Os pontos desta missão saíram da sua carteira.' })
+      } else {
+        await concluirMissao(Number(mission.id))
+        setFeedback({ tipo: 'sucesso', texto: `🎉 Missão concluída! +${mission.points} pontos para a sua carteira.` })
+      }
+      refetch(true)
+    } catch (error) {
+      const texto = error instanceof ApiError ? error.message : 'Não foi possível salvar. Tente novamente.'
+      setFeedback({ tipo: 'erro', texto })
+    } finally {
+      setEnviando(false)
+    }
+  }
+
   return (
     <main className="mx-auto max-w-3xl px-4 py-16">
       <BackLink />
       <MissaoCard mission={mission} />
+
+      <div className="mt-6 flex flex-col items-center gap-3 text-center">
+        <button
+          onClick={alternarConclusao}
+          disabled={enviando}
+          className={`w-full rounded-full px-8 py-3 font-semibold transition disabled:cursor-wait disabled:opacity-60 sm:w-auto ${
+            mission.conclusao
+              ? 'border border-border-soft bg-white text-text-body hover:bg-bg'
+              : 'bg-primary text-white hover:bg-secondary'
+          }`}
+        >
+          {enviando ? 'Salvando...' : mission.conclusao ? 'Desfazer conclusão' : '✅ Marcar como concluída'}
+        </button>
+
+        {feedback && (
+          <p
+            role={feedback.tipo === 'erro' ? 'alert' : 'status'}
+            className={`text-sm font-semibold ${feedback.tipo === 'erro' ? 'text-red-600' : 'text-primary'}`}
+          >
+            {feedback.texto}
+          </p>
+        )}
+      </div>
     </main>
   )
 }
