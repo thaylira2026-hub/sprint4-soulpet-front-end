@@ -3,12 +3,14 @@ import FeatureCard from '../components/feature-card'
 import MissionCard from '../components/mission-card'
 import RewardCard from '../components/reward-card'
 import StatCounter from '../components/stat-counter'
-import { missions } from '../data/missions'
-import { rewards } from '../data/rewards'
+import { EmptyState, ErrorState, LoadingState } from '../components/status-message'
+import { useFetch } from '../hooks/use-fetch'
+import { listarMissoes } from '../services/missao-service'
+import { listarRecompensas } from '../services/recompensa-service'
 
 const Home = () => {
-  const featuredMissions = missions.slice(0, 3)
-  const featuredRewards = rewards.slice(0, 4)
+  const missoes = useFetch(listarMissoes)
+  const recompensas = useFetch(listarRecompensas)
 
   return (
     <main>
@@ -28,7 +30,7 @@ const Home = () => {
             Na SoulPet você completa missões, acumula pontos e troca por produtos reais para o seu pet — tudo de graça e pelo bem dos animais!
           </p>
 
-          <div className="mt-6 flex justify-center gap-4">
+          <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row sm:gap-4">
             <Link to="/sobre" className="rounded-full border border-primary px-6 py-3 font-semibold text-primary hover:bg-lilac-light">
               Conhecer o projeto
             </Link>
@@ -37,7 +39,7 @@ const Home = () => {
             </Link>
           </div>
 
-          <div className="mt-10 flex justify-center gap-10">
+          <div className="mt-10 flex flex-wrap justify-center gap-6 sm:gap-10">
             <StatCounter target={1200} label="Missões disponíveis" />
             <StatCounter target={50} label="Recompensas" />
             <StatCounter target={5000} label="Pets beneficiados" />
@@ -87,20 +89,31 @@ const Home = () => {
             <p className="mt-2 text-text-body">Fácil, médio ou difícil — escolha o seu ritmo e comece a ganhar pontos agora!</p>
           </div>
 
-          <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3">
-            {featuredMissions.map((mission) => (
-              <MissionCard
-                key={mission.id}
-                id={mission.id}
-                icon={mission.icon}
-                difficulty={mission.difficulty}
-                tag={mission.tag}
-                title={mission.title}
-                description={mission.description}
-                points={mission.points}
-                deadline={mission.deadline}
-              />
-            ))}
+          <div className="mt-10">
+            {missoes.state.status === 'loading' && <LoadingState message="Buscando missões..." />}
+            {missoes.state.status === 'error' && (
+              <ErrorState message={missoes.state.message} onRetry={() => missoes.refetch()} />
+            )}
+            {missoes.state.status === 'success' && missoes.state.data.length === 0 && (
+              <EmptyState icon="🎯" title="Nenhuma missão cadastrada ainda" />
+            )}
+            {missoes.state.status === 'success' && missoes.state.data.length > 0 && (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {missoes.state.data.slice(0, 3).map((mission) => (
+                  <MissionCard
+                    key={mission.id}
+                    id={mission.id}
+                    icon={mission.icon}
+                    difficulty={mission.difficulty}
+                    tag={mission.tag}
+                    title={mission.title}
+                    description={mission.description}
+                    points={mission.points}
+                    deadline={mission.deadline}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="mt-8 text-center">
@@ -122,16 +135,27 @@ const Home = () => {
             <p className="mt-2 text-text-body">Sem gastar dinheiro! Use seus pontos para resgatar produtos de qualidade para o seu pet.</p>
           </div>
 
-          <div className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-4">
-            {featuredRewards.map((reward) => (
-              <RewardCard
-                key={reward.id}
-                id={reward.id}
-                emoji={reward.emoji}
-                name={reward.name}
-                points={reward.points}
-              />
-            ))}
+          <div className="mt-10">
+            {recompensas.state.status === 'loading' && <LoadingState message="Buscando recompensas..." />}
+            {recompensas.state.status === 'error' && (
+              <ErrorState message={recompensas.state.message} onRetry={() => recompensas.refetch()} />
+            )}
+            {recompensas.state.status === 'success' && recompensas.state.data.length === 0 && (
+              <EmptyState icon="🎁" title="Nenhuma recompensa cadastrada ainda" />
+            )}
+            {recompensas.state.status === 'success' && recompensas.state.data.length > 0 && (
+              <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-4">
+                {recompensas.state.data.slice(0, 4).map((reward) => (
+                  <RewardCard
+                    key={reward.id}
+                    id={reward.id}
+                    emoji={reward.emoji}
+                    name={reward.name}
+                    points={reward.points}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           <div className="mt-8 text-center">
