@@ -1,15 +1,32 @@
+import { useEffect, useState } from 'react'
+
 // Componentes reutilizáveis para os 3 estados de uma requisição: carregando, erro e vazio
 
 interface LoadingStateProps {
   message?: string
 }
 
-export const LoadingState = ({ message = 'Carregando...' }: LoadingStateProps) => (
-  <div role="status" aria-live="polite" className="flex flex-col items-center gap-3 py-16 text-text-muted">
-    <span className="h-10 w-10 animate-spin rounded-full border-4 border-lilac-light border-t-primary" />
-    <span className="text-sm font-semibold">{message}</span>
-  </div>
-)
+export const LoadingState = ({ message = 'Carregando...' }: LoadingStateProps) => {
+  const [demorando, setDemorando] = useState(false)
+
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDemorando(true), 5000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  return (
+    <div role="status" aria-live="polite" className="flex flex-col items-center gap-3 py-16 text-center text-text-muted">
+      <span className="h-10 w-10 animate-spin rounded-full border-4 border-lilac-light border-t-primary" />
+      <span className="text-sm font-semibold">{message}</span>
+      {demorando && (
+        <span className="max-w-xs text-xs">
+          ⏳ O servidor está acordando, isso pode levar até 1 minuto na primeira visita. Obrigada pela paciência! 🐾
+        </span>
+      )}
+    </div>
+  )
+}
 
 interface ErrorStateProps {
   message: string

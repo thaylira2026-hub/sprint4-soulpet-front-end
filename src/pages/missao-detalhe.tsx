@@ -1,33 +1,104 @@
+import { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { missions } from '../data/missions'
+import { ErrorState, LoadingState } from '../components/status-message'
+import { useFetch } from '../hooks/use-fetch'
+import { ApiError } from '../services/http'
+import { buscarMissao, concluirMissao, desfazerConclusao } from '../services/missao-service'
+import type { MissaoComStatus } from '../types/missao'
+
+type Feedback = { tipo: 'sucesso' | 'erro'; texto: string } | null
 
 const MissaoDetalhe = () => {
-  const { id } = useParams()
-  const mission = missions.find((m) => m.id === id)
+  const { id = '' } = useParams()
+  const { state, refetch } = useFetch((signal) => buscarMissao(id, signal), [id])
+  const [enviando, setEnviando] = useState(false)
+  const [feedback, setFeedback] = useState<Feedback>(null)
 
-  if (!mission) {
-    return <MissaoNaoEncontrada />
+  if (state.status === 'loading' || state.status === 'idle') {
+    return (
+      <main className="mx-auto max-w-3xl px-4 py-16">
+        <BackLink />
+        <LoadingState message="Carregando missão..." />
+      </main>
+    )
+  }
+
+  if (state.status === 'error') {
+    if (state.code === 404) {
+      return <MissaoNaoEncontrada />
+    }
+    return (
+      <main className="mx-auto max-w-3xl px-4 py-16">
+        <BackLink />
+        <div className="mt-6">
+          <ErrorState message={state.message} onRetry={() => refetch()} />
+        </div>
+      </main>
+    )
+  }
+
+  const mission = state.data
+
+  // POST /usuarios-missoes ou DELETE /usuarios-missoes/{codigo}
+  const alternarConclusao = async () => {
+    setEnviando(true)
+    setFeedback(null)
+    try {
+      if (mission.conclusao) {
+        await desfazerConclusao(mission.conclusao.codigo)
+        setFeedback({ tipo: 'sucesso', texto: 'Conclusão desfeita. Os pontos desta missão saíram da sua carteira.' })
+      } else {
+        await concluirMissao(Number(mission.id))
+        setFeedback({ tipo: 'sucesso', texto: `🎉 Missão concluída! +${mission.points} pontos para a sua carteira.` })
+      }
+      refetch(true)
+    } catch (error) {
+      const texto = error instanceof ApiError ? error.message : 'Não foi possível salvar. Tente novamente.'
+      setFeedback({ tipo: 'erro', texto })
+    } finally {
+      setEnviando(false)
+    }
   }
 
   return (
     <main className="mx-auto max-w-3xl px-4 py-16">
       <BackLink />
       <MissaoCard mission={mission} />
+
+      <div className="mt-6 flex flex-col items-center gap-3 text-center">
+        <button
+          onClick={alternarConclusao}
+          disabled={enviando}
+          className={`w-full rounded-full px-8 py-3 font-semibold transition disabled:cursor-wait disabled:opacity-60 sm:w-auto ${
+            mission.conclusao
+              ? 'border border-border-soft bg-white text-text-body hover:bg-bg'
+              : 'bg-primary text-white hover:bg-secondary'
+          }`}
+        >
+          {enviando ? 'Salvando...' : mission.conclusao ? 'Desfazer conclusão' : '✅ Marcar como concluída'}
+        </button>
+
+        {feedback && (
+          <p
+            role={feedback.tipo === 'erro' ? 'alert' : 'status'}
+            className={`text-sm font-semibold ${feedback.tipo === 'erro' ? 'text-red-600' : 'text-primary'}`}
+          >
+            {feedback.texto}
+          </p>
+        )}
+      </div>
     </main>
   )
 }
 
 const MissaoNaoEncontrada = () => (
   <main className="mx-auto max-w-2xl px-4 py-20 text-center">
-    <h1 className="font-display text-2xl font-bold text-text-dark">
-      Missão não encontrada
-    </h1>
-    <p className="mt-2 text-text-muted">
-      A missão que você procura não existe ou foi removida.
-    </p>
+    <div className="text-5xl">🔍</div>
+    <h1 className="mt-4 font-display text-2xl font-bold text-text-dark">Missão não encontrada</h1>
+    <p className="mt-2 text-text-muted">A missão que você procura não existe ou foi removida.</p>
     <Link
       to="/missoes"
-      className="mt-6 inline-block rounded-full bg-primary px-6 py-3 font-semibold text-white"
+      className="mt-6 inline-block rounded-full bg-primary px-6 py-3 font-semibold text-white hover:bg-secondary"
     >
       Voltar para Missões
     </Link>
@@ -40,37 +111,27 @@ const BackLink = () => (
   </Link>
 )
 
-type MissaoCardProps = {
-  mission: {
-    icon: string
-    difficulty: string
-    tag: string
-    title: string
-    description: string
-    points: number
-    deadline: string
-  }
+interface MissaoCardProps {
+  mission: MissaoComStatus
 }
 
 const MissaoCard = ({ mission }: MissaoCardProps) => (
-  <div className="mt-6 rounded-3xl border border-border-soft bg-white p-8 shadow-lg">
+  <article className="mt-6 rounded-3xl border border-border-soft bg-white p-6 shadow-lg sm:p-8">
     <div className="text-5xl">{mission.icon}</div>
 
     <div className="mt-4 flex flex-wrap gap-2">
       <span className="rounded-full bg-lilac-light px-3 py-1 text-sm font-semibold text-primary">
         {mission.difficulty}
       </span>
-      <span className="rounded-full bg-blue-light px-3 py-1 text-sm font-semibold text-blue">
-        {mission.tag}
-      </span>
+      {mission.tag && (
+        <span className="rounded-full bg-blue-light px-3 py-1 text-sm font-semibold text-blue">{mission.tag}</span>
+      )}
     </div>
 
-    <h1 className="mt-4 font-display text-3xl font-bold text-text-dark">
-      {mission.title}
-    </h1>
+    <h1 className="mt-4 font-display text-2xl font-bold text-text-dark sm:text-3xl">{mission.title}</h1>
     <p className="mt-4 text-text-body">{mission.description}</p>
 
-    <div className="mt-6 flex gap-6 border-t border-border-soft pt-6">
+    <div className="mt-6 flex flex-wrap gap-6 border-t border-border-soft pt-6">
       <div>
         <div className="text-sm text-text-muted">Recompensa</div>
         <div className="text-xl font-bold text-primary">+{mission.points} pts</div>
@@ -79,8 +140,16 @@ const MissaoCard = ({ mission }: MissaoCardProps) => (
         <div className="text-sm text-text-muted">Prazo</div>
         <div className="text-xl font-bold text-text-dark">{mission.deadline}</div>
       </div>
+      {mission.conclusao?.dataConclusao && (
+        <div>
+          <div className="text-sm text-text-muted">Concluída em</div>
+          <div className="text-xl font-bold text-text-dark">
+            {new Date(`${mission.conclusao.dataConclusao}T12:00:00`).toLocaleDateString('pt-BR')}
+          </div>
+        </div>
+      )}
     </div>
-  </div>
+  </article>
 )
 
 export default MissaoDetalhe

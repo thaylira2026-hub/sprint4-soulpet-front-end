@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import MissionCard from '../components/mission-card'
-import { missions } from '../data/missions'
+import { EmptyState, ErrorState, LoadingState } from '../components/status-message'
+import { useFetch } from '../hooks/use-fetch'
+import { listarMissoes } from '../services/missao-service'
+import type { MissionLevel } from '../types/missao'
 
-type LevelFilter = 'all' | 'easy' | 'medium' | 'hard'
+// Union type: "todas" ou um dos níveis definidos no tipo da missão
+type LevelFilter = 'all' | MissionLevel
 
 const Missoes = () => {
   const [filter, setFilter] = useState<LevelFilter>('all')
+  const { state, refetch } = useFetch(listarMissoes)
 
+  const missions = state.status === 'success' ? state.data : []
   const filteredMissions =
     filter === 'all' ? missions : missions.filter((mission) => mission.level === filter)
 
@@ -65,23 +71,46 @@ const Missoes = () => {
           </div>
 
           <h2 id="missions-list-title" className="mt-6 font-display text-xl font-bold text-text-dark">
-            Missões disponíveis — <span className="text-primary">{filteredMissions.length} missões</span>
+            Missões disponíveis
+            {state.status === 'success' && (
+              <span className="text-primary"> — {filteredMissions.length} missões</span>
+            )}
           </h2>
 
-          <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-3" aria-live="polite">
-            {filteredMissions.map((mission) => (
-              <MissionCard
-                key={mission.id}
-                id={mission.id}
-                icon={mission.icon}
-                difficulty={mission.difficulty}
-                tag={mission.tag}
-                title={mission.title}
-                description={mission.description}
-                points={mission.points}
-                deadline={mission.deadline}
+          <div className="mt-6" aria-live="polite">
+            {state.status === 'loading' && <LoadingState message="Buscando missões..." />}
+
+            {state.status === 'error' && <ErrorState message={state.message} onRetry={() => refetch()} />}
+
+            {state.status === 'success' && filteredMissions.length === 0 && (
+              <EmptyState
+                icon="🎯"
+                title="Nenhuma missão por aqui"
+                description={
+                  missions.length === 0
+                    ? 'Ainda não há missões cadastradas. Volte em breve!'
+                    : 'Não há missões com essa dificuldade. Experimente outro filtro.'
+                }
               />
-            ))}
+            )}
+
+            {state.status === 'success' && filteredMissions.length > 0 && (
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {filteredMissions.map((mission) => (
+                  <MissionCard
+                    key={mission.id}
+                    id={mission.id}
+                    icon={mission.icon}
+                    difficulty={mission.difficulty}
+                    tag={mission.tag}
+                    title={mission.title}
+                    description={mission.description}
+                    points={mission.points}
+                    deadline={mission.deadline}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Como os níveis funcionam */}

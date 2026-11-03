@@ -8,7 +8,7 @@ export type AsyncState<T> =
   | { status: 'idle' }
   | { status: 'loading' }
   | { status: 'success'; data: T }
-  | { status: 'error'; message: string }
+  | { status: 'error'; message: string; code: number }
 
 // Intersection type: junta qualquer tipo com um id numérico vindo do banco
 export type WithId = { id: number }
