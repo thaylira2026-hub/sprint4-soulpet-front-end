@@ -113,7 +113,7 @@ const Sobre = () => {
             <RoadmapItem icon="🎨" title="Design & Layout" status="Sprint 1 · ✅ Concluído" />
             <RoadmapItem icon="🔧" title="Responsividade" status="Sprint 2 · ✅ Concluído" />
             <RoadmapItem icon="⚡" title="Migração para React + Vite" status="Sprint 3 · ✅ Concluído" />
-            <RoadmapItem icon="🚀" title="Integração com API e Deploy" status="Sprint 4 · 🔄 Em andamento" />
+            <RoadmapItem icon="🚀" title="Integração com API e Deploy" status="Sprint 4 · ✅ Concluído" />
           </div>
         </div>
       </section>
@@ -129,6 +129,7 @@ const Sobre = () => {
 
           <div className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-4">
             <FeatureCard icon="⚛️" title="React" description="Componentização e SPA" />
+            <FeatureCard icon="⚛️" title="React" description="API REST Java" />
             <FeatureCard icon="⚡" title="Vite" description="Build rápido e eficiente" />
             <FeatureCard icon="🔷" title="TypeScript" description="Tipagem estática e segurança" />
             <FeatureCard icon="🎨" title="Tailwind CSS" description="Estilização utilitária e responsiva" />
