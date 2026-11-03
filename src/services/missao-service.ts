@@ -40,6 +40,13 @@ const ICONES: Array<[RegExp, string]> = [
 const iconeDaMissao = (titulo: string): string =>
   ICONES.find(([regex]) => regex.test(titulo))?.[1] ?? '🐾'
 
+// Quando o banco falha, a API Java devolve itens "em branco" (campos null) em vez de um erro.
+// Estas checagens transformam isso num erro de verdade, que a tela sabe mostrar.
+const FALHA_NO_SERVIDOR = 'O servidor não conseguiu buscar os dados agora. Tente novamente.'
+
+const missaoValida = (missao: MissaoApi | null | undefined): missao is MissaoApi =>
+  missao != null && missao.codigo != null && missao.titulo != null
+
 // Converte o JSON da API para o formato que os componentes usam
 export const toMission = (missao: MissaoApi, concluida = false): Mission => {
   const level = nivelPorPontos(missao.pontosRecompensa)
@@ -58,7 +65,7 @@ export const toMission = (missao: MissaoApi, concluida = false): Mission => {
 
 const conclusoesDoUsuario = async (signal?: AbortSignal): Promise<UsuarioMissaoApi[]> => {
   const todas = (await http.get<UsuarioMissaoApi[]>('/usuarios-missoes', signal)) ?? []
-  return todas.filter((item) => item.codUsuario === USUARIO_ID && item.concluida)
+  return todas.filter((item) => item.codigo != null && item.codUsuario === USUARIO_ID && item.concluida)
 }
 
 // GET /missoes + GET /usuarios-missoes → lista com a marcação das missões já concluídas
@@ -68,7 +75,9 @@ export async function listarMissoes(signal?: AbortSignal): Promise<Mission[]> {
     conclusoesDoUsuario(signal),
   ])
   const concluidas = new Set(conclusoes.map((item) => item.codMissao))
-  return (missoes ?? []).map((missao) => toMission(missao, concluidas.has(missao.codigo)))
+  return (missoes ?? [])
+    .filter(missaoValida)
+    .map((missao) => toMission(missao, concluidas.has(missao.codigo)))
 }
 
 // GET /missoes/{codigo} → detalhe da missão + status de conclusão do usuário
@@ -79,6 +88,8 @@ export async function buscarMissao(id: string, signal?: AbortSignal): Promise<Mi
     http.get<MissaoApi>(`/missoes/${id}`, signal),
     conclusoesDoUsuario(signal),
   ])
+  if (!missaoValida(missao)) throw new ApiError(FALHA_NO_SERVIDOR, 503)
+
   const conclusao = conclusoes.find((item) => item.codMissao === missao.codigo) ?? null
   return { ...toMission(missao, conclusao !== null), conclusao }
 }
