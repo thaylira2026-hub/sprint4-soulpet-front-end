@@ -129,7 +129,7 @@ const Sobre = () => {
 
           <div className="mt-10 grid grid-cols-2 gap-6 md:grid-cols-4">
             <FeatureCard icon="⚛️" title="React" description="Componentização e SPA" />
-            <FeatureCard icon="⚛️" title="React" description="API REST Java" />
+            <FeatureCard icon="☕" title="API Java" description="API REST com Spring Boot" />
             <FeatureCard icon="⚡" title="Vite" description="Build rápido e eficiente" />
             <FeatureCard icon="🔷" title="TypeScript" description="Tipagem estática e segurança" />
             <FeatureCard icon="🎨" title="Tailwind CSS" description="Estilização utilitária e responsiva" />
