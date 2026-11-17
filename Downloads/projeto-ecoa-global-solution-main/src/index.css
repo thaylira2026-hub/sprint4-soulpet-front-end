@@ -1,0 +1,58 @@
+@import "tailwindcss";
+
+/* Cores e fonte do Ecoa+ (viram classes como bg-mare, text-tinta, bg-sinal) */
+@theme {
+  --font-sans: "Lexend", ui-sans-serif, system-ui, sans-serif;
+
+  --color-tinta: #0e2a33;
+  --color-mare: #0f766e;
+  --color-mare-clara: #ccebe6;
+  --color-sinal: #ffc83d;
+  --color-nevoa: #eef4f3;
+
+  --animate-eco: eco 3s ease-out infinite;
+
+  @keyframes eco {
+    0% {
+      transform: scale(0.6);
+      opacity: 0.7;
+    }
+    100% {
+      transform: scale(1.6);
+      opacity: 0;
+    }
+  }
+}
+
+/* Contorno bem visível para quem navega pelo teclado */
+:focus-visible {
+  outline: 3px solid var(--color-sinal);
+  outline-offset: 3px;
+}
+
+/* Modo alto contraste: ligado pela barra de acessibilidade.
+   Troca as cores do tema, então todas as classes do Tailwind mudam juntas. */
+.alto-contraste {
+  --color-nevoa: #000000;
+  --color-white: #000000;
+  --color-tinta: #ffffff;
+  --color-mare: #ffff00;
+  --color-mare-clara: #1f1f1f;
+  --color-sinal: #ffff00;
+}
+
+/* Texto preto sobre o amarelo, para manter a leitura */
+.alto-contraste .bg-sinal,
+.alto-contraste .bg-sinal *,
+.alto-contraste .bg-mare,
+.alto-contraste .bg-mare * {
+  color: #000000;
+}
+
+.alto-contraste .text-red-700 {
+  color: #ff8080;
+}
+
+.alto-contraste .border-red-600 {
+  border-color: #ff8080;
+}

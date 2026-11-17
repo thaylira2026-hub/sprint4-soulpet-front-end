@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg?v=2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Ecoa+: serviços públicos acessíveis para pessoas surdas e com deficiência auditiva." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;800&display=swap" rel="stylesheet" />
+    <title>Ecoa+</title>
+        <style>
+      /* No celular, o ícone azul do VLibras some: o botão "Libras" fica na barra de atalhos embaixo */
+      @media (max-width: 1023px) {
+        #vlibras-access-wrapper {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- VLibras: tradutor gratuito do governo federal (português para Libras) -->
+    <script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+    <script>
+      if (window.VLibras) {
+        // O VLibras lembra se ficou aberto na última visita e abre sozinho.
+        // Aqui marcamos como fechado, para ele só abrir quando a pessoa clicar.
+        try {
+          var salvo = localStorage.getItem('@vlibras-widget')
+          if (salvo) {
+            localStorage.setItem('@vlibras-widget', salvo.replace('"isOpen":true', '"isOpen":false'))
+          }
+        } catch (e) {
+          // Sem localStorage, não há nada salvo para limpar
+        }
+
+        new window.VLibras.Widget('https://vlibras.gov.br/app')
+
+        // O ícone azul padrão tem só 40px. Aqui ele passa para 64px.
+        // O VLibras desenha o ícone dentro de um "shadow DOM", por isso o estilo entra lá dentro.
+        var tentativas = 0
+        function aumentarIconeVLibras() {
+          var caixa = document.getElementById('vlibras-access-wrapper')
+          if (!caixa || !caixa.shadowRoot) {
+            tentativas++
+            if (tentativas < 50) setTimeout(aumentarIconeVLibras, 200)
+            return
+          }
+          var estilo = document.createElement('style')
+          estilo.textContent =
+            '#vlibras-access { width: 64px; height: 64px; top: calc(50vh - 32px); }' +
+            '#vlibras-access:hover, #vlibras-access:has(#vlibras-button:focus-visible) { width: 320px; }' +
+            '#vlibras-button, #vlibras-popup { height: 64px; }' +
+            '#vlibras-button { width: 64px; }' +
+            '#vlibras-button img { width: 100%; height: 100%; }'
+          caixa.shadowRoot.appendChild(estilo)
+        }
+        aumentarIconeVLibras()
+      }
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
